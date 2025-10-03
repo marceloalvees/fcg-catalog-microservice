@@ -12,8 +12,13 @@ namespace IntegrationTests.Controllers
         public void OneTimeSetup()
         {
             _fixture = new FcgFixture();
-            Initialize(_fixture, "catalog");
-            
+            //Initialize(_fixture, "catalog");
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            _fixture?.Dispose();
         }
     }
 }

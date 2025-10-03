@@ -103,7 +103,7 @@ dotnet test tests/IntegrationTests/IntegrationTests.csproj
 1. **Clone o repositório:**
    ```powershell
    git clone https://github.com/marceloalvees/fcg-catalog-microservice
-   cd FCG.Catalog
+   cd fcg-catalog-microservice
    ```
 
 2. **Restaure as dependências:**
@@ -132,19 +132,19 @@ dotnet test tests/IntegrationTests/IntegrationTests.csproj
 docker build -t fcg-catalog .
 
 # Executar container
-docker run -p 5000:8080 fcg-catalog
+docker run -p 5000:5000 fcg-catalog
 ```
 
 ## Endpoints da API
 
 ### Catálogos
-- `GET /api/catalogs` - Listar catálogos
-- `GET /api/catalogs/{id}` - Obter catálogo por ID
-- `POST /api/catalogs` - Criar novo catálogo
-- `PUT /api/catalogs/{id}` - Atualizar catálogo
-- `DELETE /api/catalogs/{id}` - Remover catálogo
-- `Post /api/catalogs/Add` - Adicionar jogos ao catalogo
-- `Post /api/catalogs/Remove` - Remove jogos do catalogo
+   - `GET /api/catalogs` - Listar catálogos
+   - `GET /api/catalogs/{id}` - Obter catálogo por ID
+   - `POST /api/catalogs` - Criar novo catálogo
+   - `PUT /api/catalogs/{id}` - Atualizar catálogo
+   - `DELETE /api/catalogs/{id}` - Remover catálogo
+   - `POST /api/catalogs/Add` - Adicionar jogos ao catálogo
+   - `POST /api/catalogs/Remove` - Remover jogos do catálogo
 
 ### Monitoramento
 - `GET /health` - Status da aplicação
@@ -162,12 +162,13 @@ docker run -p 5000:8080 fcg-catalog
 
 ```json
 {
-  "ElasticSearch": {
-    "Url": "http://localhost:9200",
-    "DefaultIndex": "fcg-catalog",
-    "Username": "",
-    "Password": ""
-  }
+   "ElasticSearchSettings": {
+      "Endpoint": "http://localhost:9200",
+      "AccessKey": "your-access-key",
+      "Secret": "your-secret-key",
+      "IndexName": "fcg-catalog",
+      "Region": "your-region"
+   }
 }
 ```
 
