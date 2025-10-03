@@ -11,7 +11,7 @@ namespace Application.Handler.Catalogs.Queries.GetCatalogByKey
             var response =  await repository.GetCatalogByKeyAsync(input.key, ct);
             if (response == null)
             {
-                return new MessageResponseDto<CatalogDto>(false, "catalog not found", new CatalogDto());
+                return new MessageResponseDto<CatalogDto>(false, "Catalog not found", new CatalogDto());
             }
             var catalogDto = MapToDto(new List<Domain.Entities.Catalog> { response }).FirstOrDefault();
             return new MessageResponseDto<CatalogDto>(true, "", catalogDto);

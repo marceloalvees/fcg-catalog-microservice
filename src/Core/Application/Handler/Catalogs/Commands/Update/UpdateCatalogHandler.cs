@@ -11,12 +11,12 @@ namespace Application.Handler.Catalogs.Commands.Update
             var existingCatalog = await repository.GetCatalogByKeyAsync(input.Key.GetValueOrDefault(), ct);
             if (existingCatalog == null)
             {
-                throw new Exception($"Catalog with key {input.Key} does not exist.");
+                return new MessageResponseDto<object>(false, $"Catalog with key {input.Key} does not exist.");
             }
             existingCatalog.SetData(input.Name, input.Description);
 
             await repository.UpdateCatalogAsync(existingCatalog, ct);
-            return new MessageResponseDto<object>(true, "catalog updated successfully");
+            return new MessageResponseDto<object>(true, "Catalog updated successfully");
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using Application._Common;
 using Application.Contracts;
-using Domain._Common.Exceptions;
 using Domain.Abstractions;
-using Domain.Entities;
-
 namespace Application.Handler.Catalogs.Commands.Delete
 {
     public class DeleteCatalogHandler(ICatalogRepository repository) : IUseCase<DeleteCatalogCommand, MessageResponseDto<object>>

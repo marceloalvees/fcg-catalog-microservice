@@ -15,6 +15,8 @@ namespace Application.Handler.Catalogs.Commands.RemoveGameFromCatalog
 
             }
             var game = catalog.Games.FirstOrDefault(g => g.Key == input.Key);
+            if(game == null)
+                return new MessageResponseDto<object>(false, $"Game with key {input.Key} does not exist in the catalog.");
             catalog.RemoveGame(game);
             await repository.UpdateCatalogAsync(catalog, ct);
             return new MessageResponseDto<object>(true, "Game removed from catalog successfully");
