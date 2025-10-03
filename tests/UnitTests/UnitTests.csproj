@@ -24,7 +24,6 @@
     <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\src\Driven\Infrastructure.ElasticSerach\Infrastructure.ElasticSerach.csproj" />
     <ProjectReference Include="..\..\src\Driving\Api\Api.csproj" />
-    <ProjectReference Include="..\IntegrationTests\IntegrationTests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
