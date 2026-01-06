@@ -1,12 +1,8 @@
-﻿using Amazon.Runtime.Internal;
-using Domain._Common.Exceptions;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.Http;
-using OpenSearch.Client;
+﻿using Domain._Common.Exceptions;
 using System.Net;
 using System.Text.Json.Serialization;
 
-namespace Api._Common
+namespace Api._Common.Contracts
 {
     public class ErrorResponse
     {

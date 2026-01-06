@@ -1,6 +1,6 @@
-using Api._Common;
 using Api._Common.Extensions;
 using Api._Common.Middleware;
+using Api._Common.Settings;
 using Api.HealthChecks;
 using Application.Handler.Catalogs.Queries.GetCatalogs;
 using Application.Validators;
@@ -24,12 +24,15 @@ ArgumentNullException.ThrowIfNull(appSettings);
 services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 services.AddOpenApi()
-    .AddFcgCatalogApiSwagger();
+    .AddFcgCatalogApiSwagger(appSettings.AuthenticationSettings);
     
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(GetCatalogsHandler).Assembly)
 ).AddValidatorsFromAssemblyContaining<CreateCatalogCommandValidator>(); ;
 
+services
+    .ConfigureAuthentication(appSettings.AuthenticationSettings)
+    .ConfigureAuthorization();
 
 var elasticSearchSettings = appSettings.ElasticSearchSettings;
 services
@@ -51,8 +54,11 @@ if (app.Environment.IsDevelopment())
     });
     app.MapOpenApi();
 }
+
 app
     .UseMiddleware<ExceptionMiddleware>()
+    .UseAuthentication()
+    .UseAuthorization()
     .UseHttpMetrics();
 
 app.MapHealthChecks(

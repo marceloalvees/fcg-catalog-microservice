@@ -1,4 +1,5 @@
-﻿using Application.Handler.Catalogs.Commands.AddGameToCatalog;
+﻿using Api._Common.Constants;
+using Application.Handler.Catalogs.Commands.AddGameToCatalog;
 using Application.Handler.Catalogs.Commands.CreateCatalog;
 using Application.Handler.Catalogs.Commands.Delete;
 using Application.Handler.Catalogs.Commands.RemoveGameFromCatalog;
@@ -6,16 +7,18 @@ using Application.Handler.Catalogs.Commands.Update;
 using Application.Handler.Catalogs.Queries.GetCatalogByKey;
 using Application.Handler.Catalogs.Queries.GetCatalogs;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CatalogController(IMediator mediator) : ControllerBase
     {
 
-        [HttpGet()]
+        [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var request = new GetCatalogsQuery();
@@ -31,7 +34,8 @@ namespace Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost()]
+        [HttpPost]
+        [Authorize(Policy = Policies.OnlyAdmin)]
         public async Task<IActionResult> Create(CreateCatalogCommand command, CancellationToken cancellationToken)
         {
             var result = await mediator.Send(command, cancellationToken);
@@ -39,6 +43,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{key:guid}")]
+        [Authorize(Policy = Policies.OnlyAdmin)]
         public async Task<IActionResult> Update(Guid key, UpdateCatalogCommand command, CancellationToken cancellationToken)
         {
             command.Key = key;
@@ -47,6 +52,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("{key:guid}")]
+        [Authorize(Policy = Policies.OnlyAdmin)]
         public async Task<IActionResult> Delete(Guid key, CancellationToken cancellationToken)
         {
             var result = await mediator.Send(new DeleteCatalogCommand(key), cancellationToken);
@@ -54,12 +60,15 @@ namespace Api.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Policy = Policies.OnlyAdmin)]
         public async Task<IActionResult> AddGameToCatalog(AddGameToCatalogCommand command, CancellationToken cancellationToken)
         {
             var result = await mediator.Send(command, cancellationToken);
             return Ok(result);
         }
+
         [HttpPost("remove")]
+        [Authorize(Policy = Policies.OnlyAdmin)]
         public async Task<IActionResult> RemoveGameFromCatalog(RemoveGameFromCatalogCommand command, CancellationToken cancellationToken)
         {
             var result = await mediator.Send(command, cancellationToken);

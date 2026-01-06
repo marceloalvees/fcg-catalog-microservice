@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using IntegrationTests._Common;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IntegrationTests
 {
@@ -28,6 +32,15 @@ namespace IntegrationTests
                         .ConfigureAppConfiguration((_, config) =>
                         {
                             config.AddJsonFile($"appsettings.{Environment}.json", optional: false, reloadOnChange: true);
+                        })
+                        .ConfigureTestServices(services =>
+                        {
+                            services.AddAuthentication(options =>
+                            {
+                                options.DefaultAuthenticateScheme = "Test";
+                                options.DefaultChallengeScheme = "Test";
+                            })
+                            .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
                         });
                 });
 
