@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fcg-catalogs
+  namespace: fcg-catalogs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fcg-catalogs
+  template:
+    metadata:
+      labels:
+        app: fcg-catalogs
+    spec:
+      containers:
+        - name: fcg-catalogs
+          image: ${IMAGE}
+          ports:
+            - containerPort: ${CONTAINER_PORT}
+
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          env:
+            - name: ElasticSearchSettings__Endpoint
+              valueFrom:
+                configMapKeyRef:
+                  name: fcg-catalogs-configs
+                  key: ElasticSearchEndpoint
+
+            - name: ElasticSearchSettings__Region
+              valueFrom:
+                configMapKeyRef:
+                  name: fcg-catalogs-configs
+                  key: ElasticSearchRegion
+
+            - name: ElasticSearchSettings__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  name: fcg-catalogs-secrets
+                  key: ElasticSearchAccessKey
+
+            - name: ElasticSearchSettings__Secret
+              valueFrom:
+                secretKeyRef:
+                  name: fcg-catalogs-secrets
+                  key: ElasticSearchSecret
+
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "${CONTAINER_PORT}"
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: ${CONTAINER_PORT}
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+            initialDelaySeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: ${CONTAINER_PORT}
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+            initialDelaySeconds: 10
